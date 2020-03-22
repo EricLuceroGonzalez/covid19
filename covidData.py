@@ -12,6 +12,8 @@ today = date.today().strftime("%-m/%-d/%y")
 todayDay = date.today().strftime("%-d")
 todayMon = date.today().strftime("%-m")
 
+# Data is obtained from CSSEGISandData
+# https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv
 
 def getData(update):
     if update:
@@ -28,9 +30,8 @@ def getData(update):
                            todayDay+'-'+todayMon+'.csv')
         return data
 
-
-# Bring the data:
-data = getData(False)
+# # Bring the data:
+data = getData(False) # True if want to update data to last push 
 
 # Some important dates:
 firstDate = '1/24/20'  # Start date on data
@@ -42,9 +43,16 @@ df = pd.DataFrame()
 dates = data.loc[data['Country/Region'] == 'Panama', firstDate: today].columns
 df['Dates'] = dates
 
+# Some countries to test
 countrie = ['Panama', 'Peru', 'Mexico', 'Spain', 'Italy',
             'El Salvador', 'Iran', 'Costa Rica', 'Colombia']
-countrie = ['Panama', 'Peru']            
+countrie = ['Panama', 'Peru', 'Mexico', 'Costa Rica', 'Colombia',
+            'El Salvador', 'Thailand', 'Sri Lanka', 'Finland', 'Chile', 'Vietnam']
+
+# Countries to plot:
+countrie = ['Panama', 'Costa Rica', 'Nicaragua', 'El Salvador', 'Guatemala',
+            'Mexico', 'Honduras', 'Colombia', 'Chile', 'Argentina', 'Ecuador', 'Peru', 'Uruguay']
+
 countries = []
 
 for i, item in enumerate(countrie):
@@ -59,7 +67,6 @@ for i, item in enumerate(countrie):
 for indx, item in enumerate(countries):
     varName = item+'Data'
     arrName = 'data'+item
-    print(arrName)
     varName = data.loc[data['Country/Region']
                        == countrie[indx], firstDate: today]
     arrName = varName.to_numpy()[0]
@@ -68,83 +75,39 @@ for indx, item in enumerate(countries):
 print('----------------------')
 print(df)
 
-
-# # Find the date of first covid case:
-# nonCasesDays = df['Panama'].loc[df['Panama'] == 0]
-# yesCasesDays = df['Panama'].loc[df['Panama'] != 0]
-# panNZdays = len(nonCasesDays)
-# panYZdays = len(yesCasesDays)
-# print('{} days with virus cases [Panama]'.format(panYZdays))
-# print('{} days without virus in [Panama]'.format(panNZdays))
-# # print(yzd)
-# # print(nzd)
-
 dataDayZero = pd.DataFrame()
 sinceZero = []
 
-
 def getSinceFirseCase():
     for indx, place in enumerate(countries):
-        # print('\n -----------------------------------------------')
         aaa = df.index[df[place] > 0].tolist()
         print('Days with virus in {}: {}'.format(place, len(aaa)))
         dataSince0 = df[place].iloc[aaa]
         dateSince0 = df['Dates'].iloc[aaa]
-        # print('dataSince0')
-        print(dataSince0)
-        # print('dateSince0')
-        # print(dateSince0.tolist())
-        print('***********************************')
         dfName = place + 'DataFrame'
-        # print(dfName)
         dfName = pd.DataFrame()
-        # print(indx)
-        # print(place)
         dfName.insert(0, place, dataSince0)
         dfName.insert(1, 'Dates', dateSince0)
         sinceZero.append(dfName)
     return sinceZero
 
 
-aaaa = getSinceFirseCase()
-print(aaaa)
-print(len(aaaa))
-for idx, item in enumerate(aaaa):
-    print(item)
-    print(item[countries[idx]])
-    print(item['Dates'])
-
-# dayZeroSpain = getSinceFirseCase( 'Spain')
-# dayZeroColombia = getSinceFirseCase('Colombia')
-# dayZeroItaly = getSinceFirseCase( 'Italy')
-# print(dayZeroColombia)
-
-# # # # Plot
-# # # plt.plot(dayZeroPanama['Dates'], dayZeroPanama['Cases'], 'o-', color='blue')
-# # plt.plot(dayZeroSpain['Dates'], dayZeroSpain['Spain'], 'o-', color='magenta')
-# # plt.plot(dayZeroItaly['Dates'], dayZeroItaly['Italy'], 'o-', color='red')
-# # plt.gcf().autofmt_xdate()
-# # plt.show()
+firstCaseArray = getSinceFirseCase()
+for idx, item in enumerate(firstCaseArray):
+    idx = 0
+    arry = []
+    for index in range(0, len(item)):
+        arry.append(index+1)
+    item.insert(0, 'Days', arry)
+# Plot
+    xCoord = item['Days'].iloc[-1]
+    yCoord = item[item.columns[1]].iloc[-1]
+    plt.plot(item['Days'], item[item.columns[1]], 'o-', label=item.columns[1]+ '('+str(yCoord)+')')
+    plt.legend(loc='best')
+    plt.text(xCoord, yCoord, yCoord)
+    plt.xlabel('Days since first case')
+    plt.ylabel('Numbers of cases')
 
 
-# # # plt.plot(dayZeroColombia['Dates'],dayZeroColombia['Cases'], 'o-', color='green')
-
-
-# Geb_b30 = [11, 10, 12, 14, 16, 19, 17, 14, 18, 17]
-# Geb_a30 = [12, 10, 13, 14, 12, 13, 18, 16]
-
-# years = list(range(2008,2018))
-
-# print(years[0:len(Geb_b30)])
-# print(years[2:])
-
-# fig, ax = plt.subplots()
-# ax.plot(years[0:len(Geb_b30)],Geb_b30, label='Prices 2008-2018',
-# color='blue')
-# ax.plot(years[2:],Geb_a30, label='Prices 2010-2018', color =
-# 'red')
-# legend = ax.legend(loc='center right', fontsize='x-large')
-# plt.xlabel('years')
-# plt.ylabel('prices')
-# plt.title('Comparison of the different prices')
-# plt.show()
+plt.savefig('daysWithVirus.png', dpi=199)
+plt.show()
