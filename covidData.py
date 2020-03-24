@@ -1,5 +1,10 @@
 # Data is obtained from CSSEGISandData
-# https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv
+# https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv (deprecated)
+# https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv (csv)
+
+# https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv (actual)
+# https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv (csv)
+
 
 import csv
 import pandas as pd
@@ -13,32 +18,36 @@ from matplotlib.font_manager import FontProperties  # Smaller font
 import test as covid
 import os
 import pathlib
-thePath = str(pathlib.Path(__file__).parent.absolute() )
+thePath = str(pathlib.Path(__file__).parent.absolute())
 theCSVPath = thePath + '/csv'
 
-today = date.today().strftime("%-m/%-d/%y")
+# today = date.today().strftime("%-m/%-d/%y")
+today = (date.today() - timedelta(days=1)).strftime("%-m/%-d/%y")
 yesterday = (date.today() - timedelta(days=1)).strftime("%-m/%-d/%y")
 todayDay = date.today().strftime("%-d")
 todayMon = date.today().strftime("%-m")
 
+
 def getData(update):
     if update:
-        url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+        url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
         dataFromCSSE = pd.read_csv(url)
         # Save the data:
         os.makedirs(theCSVPath, exist_ok=True)
         dataFromCSSE.to_csv(
             theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
-        loadedData = pd.read_csv(thePath+
-                                 todayDay+'-'+todayMon+'.csv')
+        loadedData = pd.read_csv(theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
         return loadedData
     else:
         if not os.path.exists(theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv'):
             yesterdays = (date.today() - timedelta(days=1)).strftime("%-d")
-            savedData = pd.read_csv(theCSVPath+'/'+yesterdays+'-'+todayMon+'-Confirmed.csv')
+            savedData = pd.read_csv(
+                theCSVPath+'/'+yesterdays+'-'+todayMon+'-Confirmed.csv')
         else:
-            savedData = pd.read_csv(theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
+            savedData = pd.read_csv(
+                theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
     return savedData
+
 
 #     # # Bring the data:
 data = getData(False)  # True if want to update data to last push
@@ -56,14 +65,24 @@ countrie = ['Panama', 'Peru', 'Mexico', 'Costa Rica', 'Colombia',
             'El Salvador', 'Thailand', 'Sri Lanka', 'Finland', 'Chile', 'Vietnam']
 
 # Countries to plot:
-country = ['Panama', 'Uruguay', 'Costa Rica', 'Nicaragua', 'El Salvador', 'Guatemala',
+latinAmerica = ['Panama', 'Uruguay', 'Costa Rica', 'Nicaragua', 'El Salvador', 'Guatemala',
            'Mexico', 'Honduras', 'Colombia', 'Chile', 'Argentina', 'Ecuador', 'Peru', 'Venezuela']
 
+# Generate the DataFrame from CSSEGISandData data
 dff, places = covid.caseVSday(
-    countries=country, data=data, startDate=firstDate, finalDate=today, printIt=False)
+    countries=latinAmerica, data=data, startDate=firstDate, finalDate=today, printIt=False)
 
-firstCaseArray = covid.getSinceFirseCase(countries=country, dataFrame=dff)
+# country = ['Panama']
+# # country = ['Panama']
+# firstCaseArray = covid.getSinceFirseCase(countries=country, dataFrame=dff)
+# # covid.plotSinceFirstCaseBar(firstCaseArray, True, todayDay, todayMon)
 
-covid.plotSinceFirsCase(firstCaseArray, saveIt=False,
-                        todayDay=todayDay, todayMon=todayMon)
+# firstCaseArray = covid.getSinceFirseCase(countries=['Panama', 'Uruguay'], dataFrame=dff)
+# covid.plotSinceFirstCase(firstCaseArray, False, todayDay, todayMon)
+# print(firstCaseArray)
+# print(dff['Panama'])
+# ['Panama'])
+
+theArray = covid.getSinceFirseCase(countries=['Panama', 'Uruguay'], dataFrame=dff)
+covid.daysWithCases(fromZeroArray=theArray, dataFrame=dff)
 
