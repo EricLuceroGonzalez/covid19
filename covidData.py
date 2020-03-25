@@ -36,7 +36,8 @@ def getData(update):
         os.makedirs(theCSVPath, exist_ok=True)
         dataFromCSSE.to_csv(
             theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
-        loadedData = pd.read_csv(theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
+        loadedData = pd.read_csv(
+            theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv')
         return loadedData
     else:
         if not os.path.exists(theCSVPath+'/'+todayDay+'-'+todayMon+'-Confirmed.csv'):
@@ -55,34 +56,23 @@ data = getData(False)  # True if want to update data to last push
 # Some important dates:
 firstDate = '1/24/20'  # Start date on data
 firstPanama = '3/10/20'  # First case in Panama
-# today = '3/22/20'
-
-
-# Some countries to test
-countrie = ['Panama', 'Peru', 'Mexico', 'Spain', 'Italy',
-            'El Salvador', 'Iran', 'Costa Rica', 'Colombia']
-countrie = ['Panama', 'Peru', 'Mexico', 'Costa Rica', 'Colombia',
-            'El Salvador', 'Thailand', 'Sri Lanka', 'Finland', 'Chile', 'Vietnam']
 
 # Countries to plot:
-latinAmerica = ['Panama', 'Uruguay', 'Costa Rica', 'Nicaragua', 'El Salvador', 'Guatemala',
-           'Mexico', 'Honduras', 'Colombia', 'Chile', 'Argentina', 'Ecuador', 'Peru', 'Venezuela']
+CentralAmerica = ['Panama', 'El Salvador', 'Nicaragua',
+                  'Guatemala', 'Costa Rica', 'Honduras', 'Mexico']
+suramerica = ['Venezuela', 'Uruguay', 'Colombia',
+              'Chile', 'Argentina', 'Ecuador', 'Peru', 'Brazil']
+latinAmerica = []
+latinAmerica = CentralAmerica + suramerica
 
-# Generate the DataFrame from CSSEGISandData data
-dff, places = covid.caseVSday(
-    countries=latinAmerica, data=data, startDate=firstDate, finalDate=today, printIt=False)
+# Generate the DataFrame from CSSEGISandData data (1):
+def runTodayPlots(condition):
+    if condition:
+        dff, places = covid.caseVSday(
+        countries=latinAmerica, data=data, startDate=firstDate, finalDate=today, printIt=False)
+        covid.plotSinceFirstCase(countries=latinAmerica, dataFrame=dff,
+                         saveIt=False, todayDay=todayDay, todayMon=todayMon)
+        covid.plotSinceFirstCaseBar(['Panama'], dff, True, todayDay, todayMon)
 
-# country = ['Panama']
-# # country = ['Panama']
-# firstCaseArray = covid.getSinceFirseCase(countries=country, dataFrame=dff)
-# # covid.plotSinceFirstCaseBar(firstCaseArray, True, todayDay, todayMon)
 
-# firstCaseArray = covid.getSinceFirseCase(countries=['Panama', 'Uruguay'], dataFrame=dff)
-# covid.plotSinceFirstCase(firstCaseArray, False, todayDay, todayMon)
-# print(firstCaseArray)
-# print(dff['Panama'])
-# ['Panama'])
-
-theArray = covid.getSinceFirseCase(countries=['Panama', 'Uruguay'], dataFrame=dff)
-covid.daysWithCases(fromZeroArray=theArray, dataFrame=dff)
-
+runTodayPlots(False)

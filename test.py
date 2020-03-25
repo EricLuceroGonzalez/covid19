@@ -75,8 +75,8 @@ def getSinceFirseCase(countries, dataFrame):
     return sinceZero
 
 
-def plotSinceFirstCase(firstCaseArray, saveIt, todayDay, todayMon):
-    print(firstCaseArray)
+def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
+    firstCaseArray = getSinceFirseCase(countries, dataFrame)
     for item in firstCaseArray:
         arry = []
     # Plot
@@ -87,13 +87,13 @@ def plotSinceFirstCase(firstCaseArray, saveIt, todayDay, todayMon):
         axes = plt.gca()
         plt.plot(item['Days'], item[item.columns[0]], 'o-',
                  label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
-        plt.legend(loc='best', prop=fontP)
+        plt.legend(loc='upper left', prop=fontP)
         plt.text(xCoord, yCoord, yCoord)
         plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
-        axes.set_xlim([0, 25])
-        axes.set_ylim([0, 1000])
+        axes.set_xlim([0, 30])
+        axes.set_ylim([0, 1200])
     if saveIt:
         os.makedirs(thePlotPath, exist_ok=True)
         file_name = thePlotPath+'daysWithVirus-'+todayDay+'-'+todayMon+'.png'
@@ -101,7 +101,8 @@ def plotSinceFirstCase(firstCaseArray, saveIt, todayDay, todayMon):
     plt.show()
 
 
-def plotSinceFirstCaseBar(firstCaseArray, saveIt, startDate, lastDate):
+def plotSinceFirstCaseBar(countries, dataFrame,saveIt, startDate, lastDate):
+    firstCaseArray = getSinceFirseCase(countries, dataFrame)
     print('++++++++++++++++++++++++++++++++++    ++++++++++++++++++++++++++++++++++')
     print(startDate)
     for item in firstCaseArray:

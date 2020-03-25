@@ -12,15 +12,17 @@ print(thePath)
 
 # Create the frames
 frames = []
-imgs = glob.glob(thePath+"/days*")
+imgs = glob.glob(thePath+"/daysWithVirus-*")
 print(glob.glob('*.png'))
-print(imgs)
-for i in imgs:
-    new_frame = Image.open(i)
-    frames.append(new_frame)
+# print(imgs)
+for i in range(10, 25):
+    for j in imgs:
+        if j == thePath+"daysWithVirus-"+str(i)+'-3.png':
+            new_frame = Image.open(j)
+            frames.append(new_frame)
 
 # Save into a GIF file that loops forever
-frames[0].save('png_to_gif.gif', format='GIF',
+frames[0].save(thePath+'covid_gif.gif', format='GIF',
                append_images=frames[1:],
                save_all=True,
-               duration=600, loop=0)
+               duration=300, loop=2)
