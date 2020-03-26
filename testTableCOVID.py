@@ -24,24 +24,58 @@ Positive = []
 UpdateDate = []
 TestPerMillion = []
 PositivePerThousand = []
-df = pd.DataFrame()
 
+df = pd.DataFrame()
+dfRegion = pd.DataFrame()
+
+CountriesRegion = []
+TotalTestRegion = []
+PositiveRegion = []
+UpdateDateRegion = []
+TestPerMillionRegion = []
+PositivePerThousandRegion = []
+
+regions = []
+countryRegion = []
 # # Extrac by html class
 my_table = soup.find('table', {'class': 'wikitable'})  # Get the table
 allTd = my_table.findAll('tr')  # Get all <a> links (lists of countries)
 # print(allTd)
 for i, aTD in enumerate(allTd):
     for i, th in enumerate(aTD.findAll('th')):
-        print('\n\n-------------')
-        # print(th)
+        if isinstance(th.get('data-sort-value'), str) == True:
+            aa = th.get('data-sort-value').split(',')
+            regions.append(aa[0])
+            countryRegion.append(aa[1])
+            for a in th.find_next('a'):
+                print(a)
+                # print(a.find_next('a'))
+                # culo.append(a.find_next('a').contents[0])
+                allTds = aTD.findAll('td')
+                # print(culo)
+                for i, region in enumerate(allTds):
+                    if i == 0:
+                        s = region.contents[0].replace("\n", "")
+                        TotalTestRegion.append(s)
+                    elif i == 1:
+                        s = region.contents[0].replace("\n", "")
+                        PositiveRegion.append(s)
+                    elif i == 2:
+                        s = region.find('span').contents[0]
+                        UpdateDateRegion.append(s)
+                    elif i == 3:
+                        s = region.contents[0].replace("\n", "")
+                        TestPerMillionRegion.append(s)
+                    elif i == 4:
+                        s = region.contents[0].replace("\n", "")
+                        PositivePerThousandRegion.append(s)
+                    print('-------------')
 
         if isinstance(th.get('data-sort-value'), str) == False:
             for a in th.select('span > img'):
                 Countries.append(a.find_next('a').contents[0])
                 allTd = aTD.findAll('td')
-                # print(allTd)
                 for i, vaina in enumerate(allTd):
-                    print('****************************** i = {}'.format(i))
                     if i == 0:
                         s = vaina.contents[0].replace("\n", "")
                         TotalTest.append(s)
@@ -49,7 +83,6 @@ for i, aTD in enumerate(allTd):
                         s = vaina.contents[0].replace("\n", "")
                         Positive.append(s)
                     elif i == 2:
-                        print('******************************')
                         s = vaina.find('span').contents[0]
                         UpdateDate.append(s)
                     elif i == 3:
@@ -69,4 +102,14 @@ df['PositivePerThousand'] = PositivePerThousand
 print(df)
 
 
+dfRegion['Region'] = countryRegion
+dfRegion['TotalTest'] = TotalTestRegion
+dfRegion['Positive'] = PositiveRegion
+dfRegion['UpdateDate'] = UpdateDateRegion
+dfRegion['TestPerMillion'] = TestPerMillionRegion
+dfRegion['PositivePerThousand'] = PositivePerThousandRegion
+
+print(dfRegion)
+
 df.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv')
+dfRegion.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerRegion.csv')
