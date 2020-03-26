@@ -53,7 +53,7 @@ def caseVSday(countries, data, startDate, finalDate, printIt):
     return df, countries
 
 
-def getSinceFirseCase(countries, dataFrame):
+def getSinceCase(countries, dataFrame):
     dataDayZero = pd.DataFrame()
     covid.shortCountryName(countries)
     sinceZero = []
@@ -76,7 +76,7 @@ def getSinceFirseCase(countries, dataFrame):
 
 
 def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
-    firstCaseArray = getSinceFirseCase(countries, dataFrame)
+    firstCaseArray = getSinceFirstCase(countries, dataFrame)
     for item in firstCaseArray:
         arry = []
     # Plot
@@ -87,8 +87,8 @@ def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
         axes = plt.gca()
         plt.plot(item['Days'], item[item.columns[0]], 'o-',
                  label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
-        plt.legend(loc='upper left', prop=fontP)
-        plt.text(xCoord, yCoord, yCoord)
+        plt.legend(loc='best', prop=fontP)
+        plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord)
         plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
@@ -101,8 +101,8 @@ def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
     plt.show()
 
 
-def plotSinceFirstCaseBar(countries, dataFrame,saveIt, startDate, lastDate):
-    firstCaseArray = getSinceFirseCase(countries, dataFrame)
+def plotSinceFirstCaseBar(countries, dataFrame, saveIt, startDate, lastDate):
+    firstCaseArray = getSinceFirstCase(countries, dataFrame)
     print('++++++++++++++++++++++++++++++++++    ++++++++++++++++++++++++++++++++++')
     print(startDate)
     for item in firstCaseArray:
@@ -112,15 +112,20 @@ def plotSinceFirstCaseBar(countries, dataFrame,saveIt, startDate, lastDate):
     # Plot
         xCoord = item['Days']
         yCoord = item[item.columns[0]]
+        plt.plot(item['Days'], item['increment'], 'o-', label='Increment')
         plt.bar(xCoord, yCoord,
                 label='Cases per day in '+item.columns[0], edgecolor='red', color='red', alpha=0.4)
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
         plt.xticks(xCoord)
         for i in range(0, len(xCoord)):
-            plt.text(item['Days'].iloc[i]-0.25, item[item.columns[0]
-                                                     ].iloc[i], item[item.columns[0]].iloc[i])
-        plt.legend(loc='best', prop=fontP)
+            y_level = item[item.columns[0]].iloc[i]
+            yy_level = item[item.columns[3]].iloc[i]
+            plt.text(item['Days'].iloc[i]-0.35, y_level + (y_level/70),
+                     item[item.columns[0]].iloc[i])
+            plt.text(item['Days'].iloc[i]-0.35, yy_level + (yy_level/10),
+                     item[item.columns[3]].iloc[i])
+        plt.legend(loc='uppert left', prop=fontP)
 
         plt.title(startDate+'/'+lastDate+'/'+date.today().strftime("%Y"))
         if saveIt:
@@ -128,6 +133,7 @@ def plotSinceFirstCaseBar(countries, dataFrame,saveIt, startDate, lastDate):
             file_name = thePlotPath+'Bar-daysWithVirus-'+startDate+'-'+lastDate+'.png'
             plt.savefig(file_name, dpi=199)
     plt.show()
+
 
 def daysWithCases(fromZeroArray, dataFrame):
     # , dataFrame, place, startDate, finalDate):
@@ -148,3 +154,34 @@ def getTheZeroDay(dataFrame, place):
             daysFromZero.append(i)
     lenDays = len(daysFromZero)
     return lenDays, daysFromZero
+
+
+def getSinceFirstCase(countries, dataFrame):
+    dataDayZero = pd.DataFrame()
+    covid.shortCountryName(countries)
+    sinceZero = []
+    for indx, place in enumerate(countries):
+        daysTranscurred = []
+        daysWithVirus = dataFrame.index[dataFrame[place] > 0].tolist()
+        for i in range(0, len(daysWithVirus)):
+            daysTranscurred.append(i+1)
+        print('Days with virus in {}: {}'.format(place, len(daysWithVirus)))
+        dataDayZero = pd.DataFrame(daysTranscurred)
+        dataSince0 = dataFrame[place].iloc[daysWithVirus]
+        dateSince0 = dataFrame['Dates'].iloc[daysWithVirus]
+        dfName = place + 'DataFrame'
+        dfName = pd.DataFrame()
+        dfName.insert(0, place, dataSince0)
+        dfName.insert(1, 'Dates', dateSince0)
+        dfName['Days'] = pd.Series(daysTranscurred, index=dfName.index)
+        casesPerDay = []
+        dflist = dfName[place].tolist()
+        for i, j in enumerate(dflist):
+            if i == 0:
+                casesPerDay.append(dflist[i])
+            else:
+                casesPerDay.append(dflist[i] - dflist[i-1])
+        dfName['increment'] = pd.Series(casesPerDay, index=dfName.index)
+        sinceZero.append(dfName)
+        print(dfName)
+    return sinceZero

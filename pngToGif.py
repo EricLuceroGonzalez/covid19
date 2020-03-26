@@ -14,8 +14,8 @@ print(thePath)
 frames = []
 imgs = glob.glob(thePath+"/daysWithVirus-*")
 print(glob.glob('*.png'))
-# print(imgs)
-for i in range(10, 25):
+print(len(imgs))
+for i in range(10, 26):
     for j in imgs:
         if j == thePath+"daysWithVirus-"+str(i)+'-3.png':
             new_frame = Image.open(j)

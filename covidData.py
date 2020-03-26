@@ -60,19 +60,26 @@ firstPanama = '3/10/20'  # First case in Panama
 # Countries to plot:
 CentralAmerica = ['Panama', 'El Salvador', 'Nicaragua',
                   'Guatemala', 'Costa Rica', 'Honduras', 'Mexico']
+#
+# CentralAmerica = ['Panama']                  
 suramerica = ['Venezuela', 'Uruguay', 'Colombia',
               'Chile', 'Argentina', 'Ecuador', 'Peru', 'Brazil']
 latinAmerica = []
 latinAmerica = CentralAmerica + suramerica
 
 # Generate the DataFrame from CSSEGISandData data (1):
-def runTodayPlots(condition):
+
+
+def runTodayPlots(listCountries, condition, savePlot):
+    dff, places = covid.caseVSday(
+        countries=listCountries, data=data, startDate=firstDate, finalDate=today, printIt=False)
     if condition:
-        dff, places = covid.caseVSday(
-        countries=latinAmerica, data=data, startDate=firstDate, finalDate=today, printIt=False)
-        covid.plotSinceFirstCase(countries=latinAmerica, dataFrame=dff,
-                         saveIt=False, todayDay=todayDay, todayMon=todayMon)
+        covid.plotSinceFirstCase(countries=listCountries, dataFrame=dff,
+                                 saveIt=savePlot, todayDay=todayDay, todayMon=todayMon)
         covid.plotSinceFirstCaseBar(['Panama'], dff, True, todayDay, todayMon)
+    return dff
 
 
-runTodayPlots(False)
+datframe = runTodayPlots(listCountries=latinAmerica, condition=True, savePlot=False)
+
+# covid.getSome(countries=CentralAmerica, dataFrame=datframe)

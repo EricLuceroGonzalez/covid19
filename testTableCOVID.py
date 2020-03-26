@@ -32,12 +32,16 @@ allTd = my_table.findAll('tr')  # Get all <a> links (lists of countries)
 # print(allTd)
 for i, aTD in enumerate(allTd):
     for i, th in enumerate(aTD.findAll('th')):
+        print('\n\n-------------')
+        # print(th)
+
         if isinstance(th.get('data-sort-value'), str) == False:
-            for a in th.select('span > a'):
-                Countries.append(a.get('title'))
+            for a in th.select('span > img'):
+                Countries.append(a.find_next('a').contents[0])
                 allTd = aTD.findAll('td')
                 # print(allTd)
                 for i, vaina in enumerate(allTd):
+                    print('****************************** i = {}'.format(i))
                     if i == 0:
                         s = vaina.contents[0].replace("\n", "")
                         TotalTest.append(s)
@@ -45,6 +49,8 @@ for i, aTD in enumerate(allTd):
                         s = vaina.contents[0].replace("\n", "")
                         Positive.append(s)
                     elif i == 2:
+                        print('******************************')
+                        s = vaina.find('span').contents[0]
                         UpdateDate.append(s)
                     elif i == 3:
                         s = vaina.contents[0].replace("\n", "")
