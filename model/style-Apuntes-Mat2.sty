@@ -1,0 +1,342 @@
+\ProvidesPackage{style-Apuntes-Mat2}
+%%%%%%%%% ERIC LUCERO G. - TESIS MACRO  %%%%%%%%%%%%
+%% @author:  Eric Lucero                                    %%
+%% @contact: ericlucero501@@gmail.com                       %%
+%% @revised:    March / 2018                         			%%
+%%                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Apuntes de Ecuaciones Diferenciales},    % title
+    pdfauthor={Eric Lucero G.},     % author
+    pdfsubject={Ecuaciones Diferenciales, Matemáticas, Calculo},   % subject of the document
+    pdfcreator={pdftex},   % creator of the document
+    pdfproducer={Texmaker, TexLive, Ubuntu 16.04}, % producer of the document
+    pdfkeywords={Física, Química, Matemáticas, Biología}, % list of keywords
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,          % color of internal links
+    citecolor=black,        % color of links to bibliography
+    filecolor=black,      % color of file links
+    urlcolor=black           % color of external links
+}
+
+\usepackage{circuitikz}
+\usepackage{lipsum}
+\usepackage{chemfig}
+\newcommand{\dx}{\hspace{2pt}dx}
+\newcommand{\dydx}{\dfrac{dy}{dx}}
+%\newcommand{\tf}[1][{}]{\fillin[#1][0.25in]
+\newcommand{\tf}[1][{}]{%
+\fillin[#1][0.25in]%
+}
+%\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{standalone}  % Incluir archivo .tex ignorando preambulo
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+%\usepackage{mathexam}%%
+%\usepackage[spanish,USenglish]{babel} % espanol, ingles
+\usepackage[spanish]{babel} % espanol, ingles
+\decimalpoint
+%\usepackage[spanish]{babel}
+\usepackage{multicol}
+\usepackage{color}
+%\usepackage[cmyk]{xcolor}
+\usepackage{tabu}
+\usepackage{wrapfig}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{siunitx}   % Sistema internacional
+\usepackage{gensymb}
+\usepackage[version=4]{mhchem}
+\usepackage{chemformula}
+\usepackage{elements}
+\usepackage{enumerate}
+%\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+%\usepackage[explicit]{titlesec}   % Modifica espacio alrededor de seccion/subsecti..
+\graphicspath{
+{/home/ericlucero/Dropbox/CursosGMP/GMPGuias/Logos/} 
+{/home/ericlucero/Dropbox/UMIP/Graficas/}
+{/home/ericlucero/Dropbox/Python_things/media/}
+}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{epsfig}
+\usepackage{framed}
+\usepackage{textcomp}
+\usepackage{lipsum}
+\usepackage[makeroom]{cancel}       % ******************* cancelar eq
+%\usepackage[framed,numbered,autolinebreaks]{mcode}
+\usepackage{fancyhdr}
+\usepackage{subcaption}
+\usepackage[font=normal,labelfont=bf]{caption}
+\captionsetup{format=hang}	%% Para que el caption tenga indent
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\tcbuselibrary{skins}
+\usepackage{capt-of}
+\usepackage{array}
+\usepackage{makecell}% http://ctan.org/pkg/makecell
+\usepackage{booktabs}
+\usepackage[usenames,dvipsnames]{pstricks}
+% *************************  TiKz  *************************
+% *************************  TiKz  *************************
+\usepackage{pgfplots,pgfplotstable}
+\usepackage{tikz}
+\usetikzlibrary{shapes,chains,mindmap,trees,backgrounds,shapes.geometric, arrows,arrows.meta, calc,plotmarks,intersections,shadows.blur, decorations.markings,patterns,decorations.pathmorphing,patterns}
+\usepackage{pstricks-add}
+\usepgfplotslibrary{fillbetween}
+
+
+%% Para la semiesfera
+\pgfkeys{/tikz/.cd, view angle/.initial=0, view angle/.store in=\picangle}
+\tikzset{
+  horizontal/.style={y={(0,sin(\picangle))}},
+  vertical at/.style={x={([horizontal] #1:1)}, y={(0,cos(\picangle)cm)}},
+  every label/.style={font=\tiny, inner sep=1pt},
+}
+
+\usepackage{bm}
+% -------------------------   margenes de acuerdo a Propuesta SENACYT:  -------------------------
+%\usepackage[a4paper,top=1.25cm, bottom=2.6cm, left=3.25cm, right=2.25cm]{geometry}
+\usepackage[
+	a4paper,
+	top=1.5cm,
+	left=3.25cm, 
+	right=3.25cm]
+{geometry}
+%% -------------------------   margenes de acuerdo a UTP:  -------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}      % PUNTOS EN EL INDICE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz,lipsum}
+\tcbuselibrary{skins,breakable}
+
+
+%%%%%%%%%%%%%%%%%               HEADER 			%%%%%%%%%%%%%%%%%
+%%%%%%%%%%            ESPACIADO DE MARGEN Y ENTRELINEAS     %%%%%%%%%%%%%%
+\pagestyle{fancy}
+\setlength\parindent{0in}
+\setlength\parskip{0.1in} 
+\setlength\headheight{56pt} %% just to make warning go away. Adjust the value after looking into the warning.
+
+%%%%%%%%%%%%%%%%%               HEADER 			%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% 				HEADER 			%%%%%%%%%%%%%%%%%
+\fancypagestyle{plain}{
+		\fancyhf{} % clear all header and footer fields
+		\fancyfoot[C]{\textbf{\thepage}} % except the center
+		\renewcommand{\headrulewidth}{0pt}
+		\renewcommand{\footrulewidth}{0pt}
+}
+\fancypagestyle{blank}{
+		\fancyhf{} % clear all header and footer fields
+	    \fancyfoot[C]{\thepage}%
+		\renewcommand{\headrulewidth}{0pt}
+		\renewcommand{\footrulewidth}{0pt}
+}
+
+\fancypagestyle{intro}{%
+%		\fancyhf{}
+%		\fancyhead[LE,RO]{}
+%		\fancyhead[RE,LO]{}
+%		\fancyfoot{} % clear all footer fields
+%		\fancyfoot[LE,RO]{\thepage}
+%		\fancyfoot[LO,CE]{From: K. Grant}
+%		\fancyfoot[CO,RE]{To: Dean A. Smith}
+		\renewcommand{\headrulewidth}{6pt}
+
+		\lhead{\rightmark}
+		\chead[e]{f}
+		\rhead[e]{h}
+		\rfoot[f]{\thepage}
+		\cfoot[h]{m}
+		\lfoot[j]{a}
+	}
+
+\renewcommand{\headrulewidth}{5pt}
+
+\fancypagestyle{fancybook}{%
+    \fancyhf{}%
+    % Note the ## here. It's required because \fancypagestyle is making a macro (\ps@fancybook).
+    % If we just wrote #1, TeX would think that it's the argument to \ps@fancybook, but
+    % \ps@fancybook doesn't take any arguments, so TeX would complain with an error message.
+    % You are not expected to understand this.
+%    \renewcommand*{\sectionmark}[1]{ \markright{\thesection\ ##1} }%
+%    \renewcommand*{\chaptermark}[1]{ \markboth{\chaptername\ \thechapter: ##1}{} }%
+    \renewcommand*{\sectionmark}[1]{ \markright{ \textsc{\thesection\ ##1}} }%
+    \renewcommand*{\chaptermark}[1]{ \markboth{  \textsc{\chaptername\ \thechapter: ##1} }{} }%
+    % Increase the length of the header such that the folios 
+    % (typography jargon for page numbers) move into the margin
+    \fancyhfoffset[LE]{6mm}% slightly less than 0.25in
+    \fancyhfoffset[RO]{6mm}%
+    % Put some space and a vertical bar between the folio and the rest of the header
+    \fancyhead[LE]{\hskip3mm\vrule\hskip3mm\leftmark}%
+    \fancyhead[RO]{\rightmark\hskip3mm\vrule\hskip3mm\thepage}%
+    \fancyfoot[CO]{\scshape ECUACIONES DIFERENCIALES}%
+	\renewcommand{\headrulewidth}{0.2mm}    
+}
+
+%%%%%%%%%%%% %%%%% %%%%% %%%%% %%%%% HEADER / FOOTER %%%%% %%%%% %%%%% %%%%% %%%%%%%%%%%         ESPACIADO DE MARGEN Y ENTRELINEAS     %%%%%%%%%%%%%%
+
+
+
+\fancypagestyle{matematicas}{%
+\rhead{\rightmark}
+\lhead{\textsc{Matemáticas}}
+\rfoot{\textsc{\thepage}}
+\cfoot{\textsc{Guía 3: Química - Biología - \textbf{\colorea{frameejemplo}{ Matemáticas}} - Física}}
+}
+
+\fancypagestyle{fisica}{%
+\rhead{\vspace{-20pt}\includegraphics[width=6cm]{Logo1}\vspace{-40pt}}
+\lhead{\textsc{Física}}
+\rfoot{\textsc{\thepage}}
+\cfoot{\textsc{Guía 3: Química - Biología - Matemáticas - \textbf{\colorea{frameejemplo}{Física}}}}
+}
+
+\fancypagestyle{quimica}{%
+\rhead{\vspace{-20pt}\includegraphics[width=6cm]{Logo1}\vspace{-40pt}}
+\lhead{\textsc{Química}}
+\rfoot{\textsc{\thepage}}
+\cfoot{\textsc{Guía 3: \textbf{\colorea{frameejemplo}{Química}} - Biología - Matemáticas - Física}}
+}
+
+\fancypagestyle{biologia}{%
+\rhead{\vspace{-20pt}\includegraphics[width=6cm]{Logo1}\vspace{-40pt}}
+\lhead{\textsc{Biología}}
+\rfoot{\textsc{\thepage}}
+\cfoot{\textsc{Guía 3: Química - \colorea{frameejemplo}{\textbf{Biología}} - Matemáticas - Física}}
+}
+
+%%%%%%%%%%            ESPACIADO DE MARGEN Y ENTRELINEAS     %%%%%%%%%%%%%%
+\setlength{\parindent}{0pt}              % No sangría
+\setlength{\parskip}{0.25em}				% Espacio entre parrafos
+\renewcommand{\baselinestretch}{1.2}    % Espacio entre lineas
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%% ASTRONOMY %%%%%%%%%%%%%%%%
+\newcommand{\Msun}{M_\odot}
+\newcommand{\Lsun}{L_\odot}
+\newcommand{\Rsun}{R_\odot}
+\newcommand{\Mearth}{M_\oplus}
+\newcommand{\Learth}{L_\oplus}
+\newcommand{\Rearth}{R_\oplus}
+%%%%%%%%%%% MATHEMATICS %%%%%%%%%%%%%%%
+\newcommand{\grad}{\nabla}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\eqnarr}{\begin{eqnarray}}
+\newcommand{\eqnend}{\end{eqnarray}}
+\newcommand{\deriv}[2]{\frac{d #1}{d #2}}
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\fradial}[2]{\phi \left( \norm{x_{#1} - x_{#2}}\right) }     
+\newcommand{\fradialcent}[2]{\phi \left( \norm{x_{#1}^c - x_{#2}^c}\right) }
+\newcommand{\fradialh}[2]{\phi \left( \norm{x_{#1} - x_{#2}^c}\right)}     
+\newcommand{\fradialhx}[2]{\phi_x \left( \norm{x_{#1}^c - x_{#2}^c}\right)}  
+\newcommand{\fradialx}[2]{\phi_x \left( \norm{{#1} - {#2}}\right)}  
+%%%%%%%%%%% MATHEMATICS %%%%%%%%%%%%%%%
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corolary}{Corolario}[theorem]
+\newtheorem{definition}[theorem]{Definición}
+\newtheorem{prop}[theorem]{Proposición}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{propi}[theorem]{Propiedad}
+
+\newcommand{\abso}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\hil}[1]{\langle #1 \rangle}
+\newcommand{\parcial}[2]{\frac{\partial #1}{\partial #2} }
+\newcommand{\deri}[2]{\frac{d #1}{d #2} }
+\newcommand{\derid}[2]{\frac{d^{2} #1}{d #2^{2}} }
+\newcommand{\derit}[2]{\frac{d^{3} #1}{d #2^{3}} }
+\newcommand{\deric}[2]{\frac{d^{4} #1}{d #2^{4}} }
+\newcommand{\Deri}[2]{\dfrac{d #1}{d #2} }
+\newcommand{\Derid}[2]{\dfrac{d^{2} #1}{d #2^{2}} }
+\newcommand{\Derit}[2]{\dfrac{d^{3} #1}{d #2^{3}} }
+\newcommand{\Deric}[2]{\dfrac{d^{4} #1}{d #2^{4}} }
+
+\renewcommand{\sin}{\sen} 
+\renewcommand{\sinh}{\senh} 
+
+\newcommand{\raya}{$\rule{2cm}{0.12mm}$}
+\renewcommand{\vector}[1]{\vec{\bm{#1}}}
+\newcommand{\colorea}[2]{{\color{#1} #2 }}
+
+\newcommand{\ihat}{\boldsymbol{\hat{\imath}}}
+\newcommand{\jhat}{\boldsymbol{\hat{\jmath}}}
+\newcommand{\xhat}{\boldsymbol{\hat{x}}}
+\newcommand{\yhat}{\boldsymbol{\hat{y}}}
+\newcommand{\khat}{\boldsymbol{\hat{k}}}
+
+\newenvironment{tituloprincipal}[3]{
+\begin{titlepage}
+    \centering
+%    \vspace*{\baselineskip}
+%{\color{moradoUTP}    
+%    \rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+%    \rule{\textwidth}{0.4pt}\\[\baselineskip]}
+%%    {\LARGE CONUNDRUMS\\ AND \\[0.3\baselineskip] PUZZLES}\\[0.2\baselineskip]
+%    {\LARGE APUNTES DE \\ {\color{moradoUTP}OPTIMIZACIÓN II}\\[0.3\baselineskip]}%\\[0.2\baselineskip]
+%{\color{moradoUTP}
+%    \rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+%    \rule{\textwidth}{1.6pt}\\[\baselineskip]}
+    \scshape
+    #1 \\
+    %UNIVERSIDAD MARÍTIMA INTERNACIONAL DE PANAMÁ \\
+	\par
+    \vspace*{2\baselineskip}
+    Apuntes del curso de:\\%[\baselineskip]
+    {\large     #2\par} 
+    %Ecuaciones Diferenciales
+   \vspace*{2\baselineskip}
+    por:\\%[\baselineskip]
+    {\large ERIC LUCERO G.\par}    
+%    \vspace*{2\baselineskip}
+    \vspace*{2\baselineskip}
+    \vfill
+Panamá\\#3\par 
+ %   \LOGO
+    }{\end{titlepage}}
+
+%%%%%%%%%%%%%%%%%%  			COLORES 			%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{lightblue}{cmyk}{0.8392,0.6157,0,0}
+\definecolor{azulejemplo}{cmyk}{0.90,0.60,0,0}
+\definecolor{backejercicio}{cmyk}{0,0.60,0.9,0}
+\definecolor{frameejemplo}{cmyk}{0.95,0.60,0,0}
+\definecolor{backejemplo}{cmyk}{0.20,0.10,0,0}
+\definecolor{fontalertas}{cmyk}{1,0,1,0.5}
+\definecolor{backalertas}{cmyk}{0.20,0,0.2,0}
+\definecolor{framealertas}{cmyk}{0.68,0,0.94,0.11}
+\definecolor{boxalertas}{cmyk}{0.8,0,0.8,0}
+\definecolor{boxexplicacion}{cmyk}{0,0.6,0.6,0}
+\definecolor{lightgray}{gray}{0.95}
+\definecolor{moradoUTP}{RGB}{69,27,105}
+\definecolor{rosadito}{RGB}{255,85,85}
+\definecolor{celestito}{RGB}{55,167,213}
+\definecolor{moradito}{RGB}{255,131,255}
+\definecolor{naranjita}{RGB}{255,131,35}
+\definecolor{naranjito}{cmyk}{0,0.53,0.7,0}
+\definecolor{orangepart}{cmyk}{0,0.73,1,0}
+\definecolor{verdechapter}{cmyk}{1,0,1,0.2}
+\definecolor{bluesection}{cmyk}{1,1,0,0.2}
+\definecolor{darkblue}{RGB}{47,68,117}
+%%%%%%%%%%%%%%				definition				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{framedefinition}{cmyk}{0, 0.40, 0.99,0}
+\definecolor{backdefinition}{cmyk}{0,0.08,0.25,0}
+
+\newcounter{explicacion}
+\newcounter{ejemplo}
+\newcounter{definitionCounter}
+\newcounter{ejercicio}

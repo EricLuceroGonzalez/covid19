@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import json
 import requests
+import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import date
@@ -75,9 +76,9 @@ def getSinceCase(countries, dataFrame):
     return sinceZero
 
 
-def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
+def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon, logScale):
     firstCaseArray = getSinceFirstCase(countries, dataFrame)
-    for item in firstCaseArray:
+    for i, item in enumerate(firstCaseArray):
         arry = []
     # Plot
         xCoord = item['Days'].iloc[-1]
@@ -85,19 +86,26 @@ def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon):
         # radii = 10 * np.random.rand(15)
         # colors = plt.cm.plasma(radii / 10.)
         axes = plt.gca()
-        plt.plot(item['Days'], item[item.columns[0]], 'o-',
-                 label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
-        plt.legend(loc='best', prop=fontP)
-        plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord)
+        sns.lineplot(item['Days'], item[item.columns[0]], marker='o',
+                     label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
+        if len(item) < 10:
+            plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord,
+                     ha="center", fontsize=8, weight='bold')
+        else:
+            plt.text(xCoord-0.35, yCoord + (yCoord/40), yCoord,
+                     ha="center", fontsize=8, weight='bold')
         plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
-        axes.set_xlim([0, 30])
-        axes.set_ylim([0, 1200])
+        # axes.set_xlim([0, 30])
+        # axes.set_ylim([0, 1200])
+        plt.legend(loc='best', prop=fontP)
+    if logScale:
+        axes.set(yscale="log")
     if saveIt:
         os.makedirs(thePlotPath, exist_ok=True)
         file_name = thePlotPath+'daysWithVirus-'+todayDay+'-'+todayMon+'.png'
-        plt.savefig(file_name, dpi=199)
+        plt.savefig(file_name, dpi=199, quality=95)
     plt.show()
 
 

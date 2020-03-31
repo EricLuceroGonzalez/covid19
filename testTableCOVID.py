@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import numpy as np
 from datetime import date
 
 import os
@@ -37,39 +38,48 @@ PositivePerThousandRegion = []
 
 regions = []
 countryRegion = []
-# # Extrac by html class
+# Extrac by html class
 my_table = soup.find('table', {'class': 'wikitable'})  # Get the table
 allTd = my_table.findAll('tr')  # Get all <a> links (lists of countries)
 # print(allTd)
 for i, aTD in enumerate(allTd):
     for i, th in enumerate(aTD.findAll('th')):
-        if isinstance(th.get('data-sort-value'), str) == True:
-            aa = th.get('data-sort-value').split(',')
-            regions.append(aa[0])
-            countryRegion.append(aa[1])
-            for a in th.find_next('a'):
-                print(a)
-                # print(a.find_next('a'))
-                # culo.append(a.find_next('a').contents[0])
-                allTds = aTD.findAll('td')
-                # print(culo)
-                for i, region in enumerate(allTds):
-                    if i == 0:
-                        s = region.contents[0].replace("\n", "")
-                        TotalTestRegion.append(s)
-                    elif i == 1:
-                        s = region.contents[0].replace("\n", "")
-                        PositiveRegion.append(s)
-                    elif i == 2:
-                        s = region.find('span').contents[0]
-                        UpdateDateRegion.append(s)
-                    elif i == 3:
-                        s = region.contents[0].replace("\n", "")
-                        TestPerMillionRegion.append(s)
-                    elif i == 4:
-                        s = region.contents[0].replace("\n", "")
-                        PositivePerThousandRegion.append(s)
-                    print('-------------')
+        # if isinstance(th.get('data-sort-value'), str) == True:
+        #     aa = th.get('data-sort-value').split(',')
+        #     regions.append(aa[0])
+        #     countryRegion.append(aa[1])
+        #     for a in th.find_next('a'):
+        #         # print(a)
+        #         # print(a.find_next('a'))
+        #         allTds = aTD.findAll('td')
+        #         for i, region in enumerate(allTds):
+        #             if i == 0:
+        #                 print(
+        #                     '&&&&&&   &&&&&&   &&&&&&   &&&&&&   &&&&&&  &&&&&&  &&&&&&   &&&&&&')
+        #                 print(region.contents)
+        #                 s = region.contents[0].replace("'", '')
+        #                 s = ''.join(c for c in s if c.isnumeric())
+        #                 s = int(s)
+        #                 TotalTestRegion.append(s)
+                    # elif i == 1:
+                    #     print(region.contents[0])
+                    #     s = region.contents[0].replace("\n", "")
+                    #     s = ''.join(c for c in s if c.isnumeric())
+                    #     s = int(s)
+                    #     PositiveRegion.append(s)
+                    # elif i == 2:
+                    #     # s = region.find('span').contents[0]
+                    #     UpdateDateRegion.append(s)
+                    # elif i == 3:
+                    #     s = region.contents[0].replace("\n", "")
+                    #     s = ''.join(c for c in s if c.isnumeric())
+                    #     int(s)
+                    #     TestPerMillionRegion.append(s)
+                    # elif i == 4:
+                    #     s = region.contents[0].replace("\n", "")
+                    #     s = ''.join(c for c in s if c.isnumeric())
+                    #     PositivePerThousandRegion.append(s)
+                    # print('-------------')
 
         if isinstance(th.get('data-sort-value'), str) == False:
             for a in th.select('span > img'):
@@ -77,39 +87,90 @@ for i, aTD in enumerate(allTd):
                 allTd = aTD.findAll('td')
                 for i, vaina in enumerate(allTd):
                     if i == 0:
-                        s = vaina.contents[0].replace("\n", "")
+                        print('conte = {}'.format(vaina.contents[0]))
+                        s = vaina.contents[0].replace("'", '')
+                        s = ''.join(c for c in s if c.isnumeric())
+                        s = int(s)
                         TotalTest.append(s)
+                        print(TotalTest)
                     elif i == 1:
-                        s = vaina.contents[0].replace("\n", "")
+                        print('conte = {}'.format(vaina.contents[0]))                        
+                        s = vaina.contents[0].replace("'", '')
+                        s = ''.join(c for c in s if c.isnumeric())
+                        print('*****************************')
+                        if s != '':
+                            s = int(s)
                         Positive.append(s)
+                        print(Positive)
                     elif i == 2:
-                        s = vaina.find('span').contents[0]
+                        # s = vaina.contents[0].replace("'", '')
+                        # s = ''.join(c for c in s if c.isnumeric())
+                        # s = int(s)
                         UpdateDate.append(s)
                     elif i == 3:
-                        s = vaina.contents[0].replace("\n", "")
+                        s = vaina.contents[0].replace("'", '')
+                        s = ''.join(c for c in s if c.isnumeric())
+                        if s != '':
+                            s = int(s)
                         TestPerMillion.append(s)
                     elif i == 4:
-                        s = vaina.contents[0].replace("\n", "")
+                        s = vaina.contents[0].replace("'", '')
+                        s = ''.join(c for c in s if c.isnumeric())
+                        if s != '':
+                            s = int(s)
                         PositivePerThousand.append(s)
-
 df['Countries'] = Countries
 df['TotalTest'] = TotalTest
 df['Positive'] = Positive
 df['UpdateDate'] = UpdateDate
 df['TestPerMillion'] = TestPerMillion
 df['PositivePerThousand'] = PositivePerThousand
-
+df['PositivePerTest'] = df['Positive'] + 2
 print(df)
 
 
-dfRegion['Region'] = countryRegion
-dfRegion['TotalTest'] = TotalTestRegion
-dfRegion['Positive'] = PositiveRegion
-dfRegion['UpdateDate'] = UpdateDateRegion
-dfRegion['TestPerMillion'] = TestPerMillionRegion
-dfRegion['PositivePerThousand'] = PositivePerThousandRegion
+# dfRegion['Region'] = countryRegion
+# dfRegion['TotalTest'] = TotalTestRegion
+# dfRegion['Positive'] = PositiveRegion
+# dfRegion['UpdateDate'] = UpdateDateRegion
+# dfRegion['TestPerMillion'] = TestPerMillionRegion
+# dfRegion['PositivePerThousand'] = PositivePerThousandRegion
+# # dfRegion['PositivePerTest'] = (dfRegion['Positive'] + dfRegion['PositivePerThousand'])
+# # dfRegion.Positive = dfRegion.Positive.astype(np.int64)
+# # dfRegion.TotalTest = dfRegion.TotalTest.astype(np.int64)
 
-print(dfRegion)
+# # dfRegion = dfRegion.assign(PositivePerThousand =lambda x: (x['TotalTest'] + x['Positive'] ) )
 
-df.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv')
-dfRegion.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerRegion.csv')
+# # print(dfRegion)
+
+# # df.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv',float_format='%.f')
+# # dfRegion.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerRegion.csv',float_format='%.f')
+
+
+# # savedData = pd.read_csv(
+# # theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv')
+# # print(savedData)
+
+# a = pd.Series(dfRegion['TotalTest'])
+# pd.to_numeric(a, errors='ignore')
+# print(a)
+# for i in a:
+#     print(int(i)+'2')
+
+# print('\n ***********  ***********  ***********  ***********  ***********  ')
+# # for i, j in enumerate(dfRegion['Positive'].tolist()):
+# #     # dfRegion['PositivePerTest'] = dfRegion['TotalTest'].astype(float)
+
+
+# # print(dfRegion)
+
+# # print(savedData['Countries']=='Panama')
+
+# # axes = plt.gca()
+# # plt.bar(savedData['Countries']=='Panama', item[item.columns[0]], 'o-',
+# #          label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
+# # plt.legend(loc='best', prop=fontP)
+# # plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord)
+# # plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
+# # plt.xlabel('Days since first case')
+# # plt.ylabel('Numbers of cases')

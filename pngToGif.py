@@ -15,7 +15,7 @@ frames = []
 imgs = glob.glob(thePath+"/daysWithVirus-*")
 print(glob.glob('*.png'))
 print(len(imgs))
-for i in range(10, 26):
+for i in range(10, 31):
     for j in imgs:
         if j == thePath+"daysWithVirus-"+str(i)+'-3.png':
             new_frame = Image.open(j)
@@ -25,4 +25,4 @@ for i in range(10, 26):
 frames[0].save(thePath+'covid_gif.gif', format='GIF',
                append_images=frames[1:],
                save_all=True,
-               duration=300, loop=2)
+               duration=400, loop=2)
