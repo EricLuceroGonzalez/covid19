@@ -7,7 +7,7 @@ from datetime import date
 import os
 import pathlib
 thePath = str(pathlib.Path(__file__).parent.absolute())
-theCSVPath = thePath + '/csv'
+theCSVPath = thePath + '/csv/'
 
 
 today = date.today().strftime("%-m/%-d/%y")
@@ -94,7 +94,7 @@ for i, aTD in enumerate(allTd):
                         TotalTest.append(s)
                         print(TotalTest)
                     elif i == 1:
-                        print('conte = {}'.format(vaina.contents[0]))                        
+                        print('conte = {}'.format(vaina.contents[0]))
                         s = vaina.contents[0].replace("'", '')
                         s = ''.join(c for c in s if c.isnumeric())
                         print('*****************************')
@@ -125,8 +125,7 @@ df['Positive'] = Positive
 df['UpdateDate'] = UpdateDate
 df['TestPerMillion'] = TestPerMillion
 df['PositivePerThousand'] = PositivePerThousand
-df['PositivePerTest'] = df['Positive'] + 2
-print(df)
+# print(df)
 
 
 # dfRegion['Region'] = countryRegion
@@ -143,14 +142,14 @@ print(df)
 
 # # print(dfRegion)
 
-# # df.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv',float_format='%.f')
+# df.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv',float_format='%.f')
 # # dfRegion.to_csv(theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerRegion.csv',float_format='%.f')
 
+print(theCSVPath +'tests.csv')
+savedData = pd.read_csv(theCSVPath +'tests.csv')
+print(savedData)
 
-# # savedData = pd.read_csv(
-# # theCSVPath + '/'+todayDay+'-'+todayMon+'-TestsPerCountry.csv')
-# # print(savedData)
-
+print(savedData['Countries'] == 'Armenia')
 # a = pd.Series(dfRegion['TotalTest'])
 # pd.to_numeric(a, errors='ignore')
 # print(a)

@@ -63,27 +63,27 @@ for index, row in panamaData.iterrows():
                       str(round(row.CasesTest, 2))+'%', color='black', ha="center", fontsize=9, weight='bold')
     if index < 10:
         lineTotal.text(row.DaysWithVirus-1, row.TotalCases + (row.TotalCases/2),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=7, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
                        str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
     if (index > 9 and index < 12):
         lineTotal.text(row.DaysWithVirus-1, row.TotalCases + (row.TotalCases/4),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=7, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
     if index < 15 and index > 12:
         lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/8)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=7, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
     if index > 15 and index < 18:
         lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/10)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=7, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
     if index > 17:
         lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/40)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=7, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/110),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
 plt.legend(loc='best')

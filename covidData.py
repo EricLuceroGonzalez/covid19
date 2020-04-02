@@ -14,6 +14,7 @@ import requests
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import date, timedelta
+import seaborn as sns
 from matplotlib.font_manager import FontProperties  # Smaller font
 import test as covid
 import os
@@ -60,9 +61,16 @@ CentralAmerica = ['Panama', 'El Salvador', 'Nicaragua',
 #
 # CentralAmerica = ['Panama']
 suramerica = ['Venezuela', 'Uruguay', 'Colombia',
-              'Chile', 'Argentina', 'Ecuador', 'Peru', 'Brazil']
+              'Chile', 'Argentina', 'Ecuador', 'Peru']
 latinAmerica = []
 latinAmerica = CentralAmerica + suramerica
+BigCountries = ['US', 'Italy', 'Spain', 'Mexico', 'Switzerland',
+                'Netherlands',
+                'Brazil',
+                'United Kingdom',
+                'Iran',
+                'France', 'Belgium',
+                'Germany']
 
 # Generate the DataFrame from CSSEGISandData data (1):
 
@@ -79,20 +87,10 @@ def runTodayPlots(BringData, listCountries, condition, savePlot):
     return dff
 
 
-# datframe = runTodayPlots(
-#     BringData=False, listCountries=CentralAmerica, condition=True, savePlot=True)
+datframe = runTodayPlots(
+    BringData=False, listCountries=BigCountries, condition=True, savePlot=True)
 
 # covid.getSome(countries=CentralAmerica, dataFrame=datframe)
 
 
-# 178,,Panama,8.538,-80.7821,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8,11,27,36,43,55,69,86,109,137,200,313,345,443,558,674,786,901,989,1075
-
-listCountries = ['Panama']
-data = getData(False)  # True if want to update data to last push
-dff, places = covid.caseVSday(
-    countries=listCountries, data=data, startDate=firstDate, finalDate=today, printIt=False)
-
-print(dff)
-
-covid.plotSinceFirstCase(countries=listCountries, dataFrame=dff,
-                         saveIt=False, todayDay=todayDay, todayMon=todayMon, logScale=True)
+# 178,,Panama,8.538,-80.7821,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,8,11,27,36,43,55,69,86,109,137,200,313,345,443,558,674,786,901,989,1075,1181,1317

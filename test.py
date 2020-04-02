@@ -90,10 +90,10 @@ def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon, logScal
                      label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
         if len(item) < 10:
             plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord,
-                     ha="center", fontsize=8, weight='bold')
+                     ha="center", fontsize=10, weight='bold')
         else:
             plt.text(xCoord-0.35, yCoord + (yCoord/40), yCoord,
-                     ha="center", fontsize=8, weight='bold')
+                     ha="center", fontsize=10, weight='bold')
         plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
