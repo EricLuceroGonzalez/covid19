@@ -42,51 +42,54 @@ print(panamaData)
 
 
 f, ax = plt.subplots(figsize=(16, 8))
-plt.xlabel('Dias desde el primer caso')
-plt.ylabel('Casos')
 sns.set_style("dark")
+axes = plt.gca()
 
 # sns.set_style("ticks")
 sns.set(style="whitegrid", color_codes=True)
 
-lineTotal = sns.lineplot(x=daysVirus-1, y=totalCases,
-                         marker='o', label='Total Cases')
 barsTestDay = sns.barplot(x=daysVirus, y=tests,
-                          edgecolor='red', color='red', alpha=0.5, label='Tests')
+                          edgecolor='red', color='red', alpha=0.35, label='Tests')
 barsCasesDay = sns.barplot(
     x=daysVirus, y=cases, color='royalblue',  label='Positives')
-
+ax2 = ax.twinx()                         
+lineTotal = sns.lineplot(x=daysVirus-1, y=totalCases,
+                         marker='o', label='Total Cases',ax=ax2)
+ax2.set_ylim([0, 2250])
 for index, row in panamaData.iterrows():
     barsTestDay.text(row.DaysWithVirus-1, row.Test+(row.Test/40),
-                     str(round(row.Test, 2)), color='black', ha="center")
+                     str(round(row.Test, 2)), color='black', ha="center", weight='bold')
     barsCasesDay.text(row.DaysWithVirus-1, row.Cases + (row.Cases/40),
-                      str(round(row.CasesTest, 2))+'%', color='black', ha="center", fontsize=9, weight='bold')
+                      str(round(row.CasesTest, 1))+'%', color='black', ha="center", fontsize=7, weight='bold')
     if index < 10:
         lineTotal.text(row.DaysWithVirus-1, row.TotalCases + (row.TotalCases/2),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
-                       str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
+                       str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
     if (index > 9 and index < 12):
         lineTotal.text(row.DaysWithVirus-1, row.TotalCases + (row.TotalCases/4),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
-                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
     if index < 15 and index > 12:
         lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/8)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
-                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
     if index > 15 and index < 18:
-        lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/10)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
+        lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/6)),
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
-                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
-    if index > 17:
-        lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/40)),
-                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=9, weight='bold', alpha=0.8, label='Total Cases')
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
+    if index > 18:
+        lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/30)),
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/110),
-                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=8, weight='bold')
-plt.legend(loc='best')
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
+ax.legend(loc='upper left')
+ax2.legend(loc='upper center')
+ax2.set_ylabel('Acumulated numbers of cases')
+ax.set_ylabel('Number of test per day')
 plt.title('Increment of cases per day and percentage of positive tests results')
 file_name = thePlotPath+'barPanamaDayli-'+todayDay+'-'+todayMon+'.png'
 plt.savefig(file_name, dpi=300, quality=95)
