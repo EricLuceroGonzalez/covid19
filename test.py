@@ -17,6 +17,8 @@ thePlotPath = str(pathlib.Path(__file__).parent.absolute()) + '/plots/'
 fontP = FontProperties()
 fontP.set_size('small')
 
+todayDay = date.today().strftime("%-d")
+todayMon = date.today().strftime("%-m")
 
 def shortCountryName(country):
     countries = []
@@ -193,3 +195,98 @@ def getSinceFirstCase(countries, dataFrame):
         sinceZero.append(dfName)
         print(dfName)
     return sinceZero
+
+
+centralAmerica = ['Panama', 'El Salvador', 'Nicaragua',
+                  'Guatemala', 'Costa Rica', 'Honduras', 'Mexico']
+# Suramerica
+surAmerica = ['Venezuela', 'Uruguay', 'Colombia',
+              'Chile', 'Argentina', 'Ecuador', 'Peru']
+# LatinAmerica
+latinAmerica = centralAmerica + surAmerica
+# BigCountries
+bigCountries = ['US', 'Italy', 'Spain', 'Mexico', 'Switzerland',
+                'Netherlands',
+                'Brazil',
+                'United Kingdom',
+                'Iran',
+                'France', 'Belgium',
+                'Germany']
+# Europe
+europe = ['Italy', 'Spain', 'Switzerland',
+          'Netherlands',
+          'United Kingdom',
+          'France', 'Belgium',
+          'Germany']
+
+
+def dataArrays(region):
+    if region == 'latinAmerica':
+        return latinAmerica
+    if region == 'bigCountries':
+        return bigCountries
+    if region == 'centralAmerica':
+        return centralAmerica
+    if region == 'europe':
+        return europe
+    if (region != 'Europe' or region != 'CentralAmerica' or region != 'BigCountries' or region != 'LatinAmerica'):
+        return 'invalid'
+
+
+def scatterPlotCountries(csvData, arrayCountries):
+    df = pd.DataFrame()
+    place = []
+    dpm = []
+    tpm = []
+    cpm = []
+    tot = []
+    toc = []
+    data = arrayCountries
+    for j, i in enumerate(data):
+        countryIndx = csvData.index[csvData['Country'] == i].tolist()
+        place.append(csvData.loc[countryIndx]['Country'].tolist()[0])
+        dpm.append(csvData.loc[countryIndx]
+                   ['DeathsPerM'].tolist()[0].replace(' ', ''))
+        tot.append(csvData.loc[countryIndx]['Total Tests'].tolist()[0])
+        toc.append(csvData.loc[countryIndx]['Total Cases'].tolist()[0])
+        tpm.append(csvData.loc[countryIndx]['TestsPerM'].tolist()[0])
+        cpm.append(csvData.loc[countryIndx]['Tot CasesPerM'].tolist()[0])
+
+    df['Place'] = pd.Series(place)
+    df['Case-Per-Million'] = pd.to_numeric(pd.Series(cpm), errors='coerce')
+    df['Dead-Per-Million'] = pd.to_numeric(pd.Series(dpm), errors='coerce')
+    df['Test-Per-Million'] = pd.to_numeric(pd.Series(tpm), errors='coerce')
+    df['TotalTests'] = pd.to_numeric(pd.Series(tot), errors='coerce')
+    df['TotalCases'] = pd.to_numeric(pd.Series(toc), errors='coerce')
+    print(df)
+    # barsTestDay = sns.barplot(x=df['Place'], y=df['Case-Per-Million'],
+    #                           edgecolor='red', color='red', alpha=0.35, label='Tests')
+    cmap = sns.cubehelix_palette(dark=.4, light=.9, as_cmap=True)
+    bars = sns.scatterplot(x='Test-Per-Million', y='Case-Per-Million',
+                           hue='Case-Per-Million', size='TotalCases',
+                           data=df,
+                           sizes=(50, 350), palette=cmap)
+    for i in df.iterrows():
+        if i[1]['Case-Per-Million'] > 1600:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/50),
+                      i[1]['Place'], color='black', ha="center", fontsize=10)
+        if i[1]['Case-Per-Million'] < 1600 and i[1]['Case-Per-Million'] > 1200:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/40),
+                      i[1]['Place'], color='black', ha="center", fontsize=10)
+        elif i[1]['Case-Per-Million'] < 1200 and i[1]['Case-Per-Million'] > 900:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/20),
+                      i[1]['Place'], color='black', ha="center", fontsize=10)
+        elif i[1]['Case-Per-Million'] > 100 and i[1]['Case-Per-Million'] < 900:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/40),
+                      i[1]['Place'], color='black', ha="center", fontsize=10)
+        elif i[1]['Case-Per-Million'] < 100:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million']+ (i[1]['Case-Per-Million']/7),
+                      i[1]['Place'], color='black', ha="center", fontsize=10)                      
+    plt.legend(loc='upper left')
+    figure = plt.gcf()  # get current figure
+    figure.set_size_inches(18, 12) # set figure's size manually to your full screen (32x18)
+    file_name = thePlotPath+'perMillion-'+todayDay+'-'+todayMon+'.png'
+    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight') # bbox_inches removes extra white spaces
+    plt.show()
+
+    return df

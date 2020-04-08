@@ -55,7 +55,7 @@ barsCasesDay = sns.barplot(
 ax2 = ax.twinx()                         
 lineTotal = sns.lineplot(x=daysVirus-1, y=totalCases,
                          marker='o', label='Total Cases',ax=ax2)
-ax2.set_ylim([0, 2250])
+ax2.set_ylim([0, 2500])
 for index, row in panamaData.iterrows():
     barsTestDay.text(row.DaysWithVirus-1, row.Test+(row.Test/40),
                      str(round(row.Test, 2)), color='black', ha="center", weight='bold')
@@ -88,11 +88,11 @@ for index, row in panamaData.iterrows():
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
 ax.legend(loc='upper left')
 ax2.legend(loc='upper center')
-ax2.set_ylabel('Acumulated numbers of cases')
-ax.set_ylabel('Number of test per day')
+ax2.set_ylabel('Acumulated number of cases')
+ax.set_ylabel('Number of tests per day')
 plt.title('Increment of cases per day and percentage of positive tests results')
 file_name = thePlotPath+'barPanamaDayli-'+todayDay+'-'+todayMon+'.png'
-plt.savefig(file_name, dpi=300, quality=95)
+plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
 plt.show()
 
 
