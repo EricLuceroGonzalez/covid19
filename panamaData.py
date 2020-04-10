@@ -55,7 +55,7 @@ barsCasesDay = sns.barplot(
 ax2 = ax.twinx()                         
 lineTotal = sns.lineplot(x=daysVirus-1, y=totalCases,
                          marker='o', label='Total Cases',ax=ax2)
-ax2.set_ylim([0, 2500])
+ax2.set_ylim([0, 2950])
 for index, row in panamaData.iterrows():
     barsTestDay.text(row.DaysWithVirus-1, row.Test+(row.Test/40),
                      str(round(row.Test, 2)), color='black', ha="center", weight='bold')
@@ -81,11 +81,21 @@ for index, row in panamaData.iterrows():
                        '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/15),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
-    if index > 18:
+    if index > 18 and index != 30 and index != 31:
         lineTotal.text(row.DaysWithVirus-1, (row.TotalCases + (row.TotalCases/30)),
                        '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
         lineTotal.text(row.DaysWithVirus-1.1, row.TotalCases + (row.TotalCases/110),
                    str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
+    if index == 30 and index != 31:
+        lineTotal.text(row.DaysWithVirus-1.65, (row.TotalCases + (row.TotalCases/35)),
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
+        lineTotal.text(row.DaysWithVirus-1.55, row.TotalCases + (row.TotalCases/110),
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')
+    if index == 31:
+        lineTotal.text(row.DaysWithVirus+0.15, (row.TotalCases + (row.TotalCases/35)),
+                       '+' + str(round(row.Cases, 2)), color='green', ha="right", fontsize=12, weight='bold', alpha=0.8, label='Total Cases')
+        lineTotal.text(row.DaysWithVirus+0.15, row.TotalCases + (row.TotalCases/110),
+                   str(round(row.TotalCases, 2)), color='firebrick', ha="center", fontsize=9, weight='bold')                   
 ax.legend(loc='upper left')
 ax2.legend(loc='upper center')
 ax2.set_ylabel('Acumulated number of cases')

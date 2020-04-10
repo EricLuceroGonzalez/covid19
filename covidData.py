@@ -88,7 +88,7 @@ def runTodayPlots(BringData, listCountries, condition, savePlot):
 
 
 datframe = runTodayPlots(
-    BringData=False, listCountries=BigCountries, condition=True, savePlot=True)
+    BringData=False, listCountries=latinAmerica, condition=True, savePlot=True)
 
 # covid.getSome(countries=CentralAmerica, dataFrame=datframe)
 

@@ -12,6 +12,7 @@ import os
 import pathlib
 thePath = str(pathlib.Path(__file__).parent.absolute())
 theCSVPath = thePath + '/csv/worldometersData/'
+thePlotPath = str(pathlib.Path(__file__).parent.absolute()) + '/plots/'
 
 today = date.today().strftime("%-m/%-d/%y")
 todayDay = date.today().strftime("%-d")
@@ -46,84 +47,91 @@ def getWorldometerData(Getit):
         allTd = my_table.findAll('tr')
         # print(allTd)
         for i, aTD in enumerate(allTd):
-            # print('\ni = {}'.format(i))
-            if i == 0:
-                a = aTD.find_next('td')
-                print(a.contents[0])
-                Country.append(a.contents[0])
-            for j in aTD.findAll('strong'):
-                print(j.contents[0])
-                Country.append(j.contents[0])
-            for j in aTD.findAll('span'):
-                print(j.contents[0])
-                Country.append(j.contents[0])
-            for j in aTD.findAll('a'):
-                Country.append(j.contents[0])
-            for index, data in enumerate(aTD.findAll('td')):
-                print('index = {}'.format(index))
-                if index == 1 and len(data.contents) != 0:
-                    TotalCases.append(data.contents[0])
-                if index == 2:  # and len(data.contents) != 0:
-                    if len(data.contents) == 0:
-                        NewCases.append(' ')
-                    if len(data.contents) != 0:
-                        NewCases.append(data.contents[0])
-                if index == 3:
-                    if len(data.contents) == 0:
-                        TotalDeaths.append(' ')
-                    if len(data.contents) != 0:
-                        TotalDeaths.append(data.contents[0])
-                if index == 4:
-                    if len(data.contents) == 0:
-                        NewDeaths.append(' ')
-                    if len(data.contents) != 0:
-                        NewDeaths.append(data.contents[0])
-                if index == 5:
-                    if len(data.contents) == 0:
-                        TotalRecovered.append(' ')
-                    if len(data.contents) != 0:
-                        TotalRecovered.append(data.contents[0])
-                if index == 6:
-                    if len(data.contents) == 0:
-                        ActiveCases.append(' ')
-                    if len(data.contents) != 0:
-                        ActiveCases.append(data.contents[0])
-                if index == 7:
-                    if len(data.contents) == 0:
-                        Critical.append(' ')
-                    if len(data.contents) != 0:
-                        Critical.append(data.contents[0])
-                if index == 8:
-                    if len(data.contents) == 0:
-                        TotCasesPerM.append(' ')
-                    if len(data.contents) != 0:
-                        s = data.contents[0]
-                        dat = s.replace(',', '')
-                        TotCasesPerM.append(float(dat))
-                if index == 9:
-                    if len(data.contents) == 0:
-                        DeathsPerM.append(' ')
-                    if len(data.contents) != 0:
-                        s = data.contents[0]
-                        dat = s.replace(',', '')
-                        DeathsPerM.append(float(dat))
-                if index == 10:
-                    if len(data.contents) == 0:
-                        TotalTests.append(' ')
-                    if len(data.contents) != 0:
-                        s = data.contents[0]
-                        dat = float(s.replace(',', ''))
-                        TotalTests.append(dat)
-                if index == 11:
-                    if len(data.contents) == 0:
-                        TestsPerM.append(' ')
-                    if len(data.contents) != 0:
-                        s = data.contents[0]
-                        dat = float(s.replace(',', ''))
-                        print(type(s))
-                        print(type(dat))
-                        TestsPerM.append(dat)
+            if i > 8:
+                print('\ni = {}'.format(i))
+                if i == 0:
+                    a = aTD.find_next('td')
+                    print(a.contents[0])
+                    Country.append(a.contents[0])
+                for j in aTD.findAll('strong'):
+                    print(j.contents[0])
+                    Country.append(j.contents[0])
+                for j in aTD.findAll('span'):
+                    print(j.contents[0])
+                    Country.append(j.contents[0])
+                for j in aTD.findAll('a'):
+                    Country.append(j.contents[0])
+                for index, data in enumerate(aTD.findAll('td')):
+                    print('index = {}'.format(index))
+                    if index == 1 and len(data.contents) != 0:
+                        TotalCases.append(data.contents[0])
+                    if index == 2:  # and len(data.contents) != 0:
+                        if len(data.contents) == 0:
+                            NewCases.append(' ')
+                        if len(data.contents) != 0:
+                            NewCases.append(data.contents[0])
+                    if index == 3:
+                        if len(data.contents) == 0:
+                            TotalDeaths.append(' ')
+                        if len(data.contents) != 0:
+                            TotalDeaths.append(data.contents[0])
+                    if index == 4:
+                        if len(data.contents) == 0:
+                            NewDeaths.append(' ')
+                        if len(data.contents) != 0:
+                            NewDeaths.append(data.contents[0])
+                    if index == 5:
+                        if len(data.contents) == 0:
+                            TotalRecovered.append(' ')
+                        if len(data.contents) != 0:
+                            TotalRecovered.append(data.contents[0])
+                    if index == 6:
+                        if len(data.contents) == 0:
+                            ActiveCases.append(' ')
+                        if len(data.contents) != 0:
+                            ActiveCases.append(data.contents[0])
+                    if index == 7:
+                        if len(data.contents) == 0:
+                            Critical.append(' ')
+                        if len(data.contents) != 0:
+                            Critical.append(data.contents[0])
+                    if index == 8:
+                        if len(data.contents) == 0:
+                            TotCasesPerM.append(' ')
+                        if len(data.contents) != 0:
+                            s = data.contents[0]
+                            dat = s.replace(',', '')
+                            TotCasesPerM.append(float(dat))
+                    if index == 9:
+                        if len(data.contents) == 0:
+                            DeathsPerM.append(' ')
+                        if len(data.contents) != 0:
+                            s = data.contents[0]
+                            dat = s.replace(',', '')
+                            DeathsPerM.append(float(dat))
+                    if index == 10:
+                        if len(data.contents) == 0:
+                            TotalTests.append(' ')
+                        if len(data.contents) != 0:
+                            s = data.contents[0]
+                            dat = float(s.replace(',', ''))
+                            TotalTests.append(dat)
+                    if index == 11:
+                        if len(data.contents) == 0:
+                            TestsPerM.append(' ')
+                        if len(data.contents) != 0:
+                            s = data.contents[0]
+                            dat = float(s.replace(',', ''))
+                            print(type(s))
+                            print(type(dat))
+                            TestsPerM.append(dat)
 
+        print(Country)
+        print(TotalCases)
+        print(TotCasesPerM)
+        print(len(Country))
+        print(len(TotalCases))
+        print(len(TotCasesPerM))
         # Create the DataFrame:
         df['Country'] = Country
         df['Total Cases'] = TotalCases
@@ -145,11 +153,11 @@ def getWorldometerData(Getit):
 
 
 # Generate new CSV?
-data = getWorldometerData(True)
+# data = getWorldometerData(True)
 
 # Open some CSV
 csvData = pd.read_csv(
-    theCSVPath+'07_04_20-19:01-WorldometersData.csv', sep=",")
+    theCSVPath+'09_04_20-19:59-WorldometersData.csv', sep=",")
 
 print(csvData.loc[[43]])
 print('*************')
@@ -159,14 +167,15 @@ print('*************')
 dat1 = ['Argentina', 'Ecuador', 'Peru',
         'El Salvador', 'Nicaragua', 'Cuba',
         'Guatemala', 'Costa Rica', 'Honduras',
-        'Mexico', 'Venezuela', 'Uruguay', 'Colombia',
+        'Mexico'        # , 'Venezuela'
+        , 'Colombia',
         'Brazil',
         'Haiti',
         'Bolivia',
         'Jamaica',
         'Paraguay',
         'Trinidad and Tobago',
-        'Belize'
+        'Belize', 'Panama', 'Uruguay'
         ]
 
 dat2 = ['Panama', 'Chile', 'Italy', 'Spain', 'Switzerland', 'Netherlands', 'Iran',
@@ -191,15 +200,52 @@ dat3 = [
     'Isle of Man',
     'Brunei ',
     'Norway',
-    'UAE',
     'Liechtenstein',
     'Malta',
-    'Bahrain']
+    'Bahrain'    # ,'UAE'
+    , 'Panama'
+]
 # 'Luxembourg',
 # 'Andorra',
 # 'San Marino',
 # 'Gibraltar']
 
-someDf = covid.scatterPlotCountries(csvData, dat1)
+someDf = covid.scatterPlotCountries(csvData, dat1+dat3+dat2, 'Panama')
+# someDf = covid.scatterPlotCountries(csvData, dat3, 'Europe')
+# someDf = covid.scatterPlotCountries(csvData, dat1, 'Latinamerica')
 
-print(someDf)
+# print(someDf)
+
+a = someDf.sort_values(by=['TotalTests'], ascending=False)
+b = someDf.sort_values(by=['Test-Per-Million'], ascending=False)
+c = someDf.sort_values(by=['Case-Per-Million'], ascending=False)
+pal = sns.color_palette("Greens_d", len(a))
+
+plotTitle = 'World'
+
+plt.figure(figsize=plt.figaspect(2.))
+rank = a['TotalTests'].argsort().argsort()
+sns.barplot(x='TotalTests', y='Place', data=a,
+            palette=np.array(pal[::-1])[rank])
+file_name = thePlotPath + plotTitle + 'Total-'+todayDay+'-'+todayMon+'.png'
+# bbox_inches removes extra white spaces
+plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+plt.show()
+
+plt.figure(figsize=plt.figaspect(2.))
+rank = a['TotalTests'].argsort().argsort()
+sns.barplot(x='Test-Per-Million', y='Place', data=b,
+            palette=np.array(pal[::-1])[rank])
+file_name = thePlotPath + plotTitle + 'TestperMillion-'+todayDay+'-'+todayMon+'.png'
+# bbox_inches removes extra white spaces
+plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+plt.show()
+
+plt.figure(figsize=plt.figaspect(2.))
+rank = a['TotalTests'].argsort().argsort()
+sns.barplot(x='Case-Per-Million', y='Place', data=c,
+            palette=np.array(pal[::-1])[rank])
+file_name = thePlotPath + plotTitle + 'CaseperMillion-'+todayDay+'-'+todayMon+'.png'
+# bbox_inches removes extra white spaces
+plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+plt.show()

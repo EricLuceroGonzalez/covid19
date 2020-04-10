@@ -6,7 +6,7 @@ import requests
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from datetime import date
+from datetime import date, datetime, time
 from matplotlib.font_manager import FontProperties  # Smaller font
 import test as covid
 
@@ -19,6 +19,8 @@ fontP.set_size('small')
 
 todayDay = date.today().strftime("%-d")
 todayMon = date.today().strftime("%-m")
+todayTime = datetime.today().strftime("%H:%M")
+
 
 def shortCountryName(country):
     countries = []
@@ -92,10 +94,10 @@ def plotSinceFirstCase(countries, dataFrame, saveIt, todayDay, todayMon, logScal
                      label=item.columns[0] + ' ('+str(yCoord)+')', alpha=0.8)
         if len(item) < 10:
             plt.text(xCoord-0.35, yCoord + (yCoord/20), yCoord,
-                     ha="center", fontsize=10, weight='bold')
+                     ha="center", fontsize=9, weight='bold')
         else:
             plt.text(xCoord-0.35, yCoord + (yCoord/40), yCoord,
-                     ha="center", fontsize=10, weight='bold')
+                     ha="center", fontsize=9, weight='bold')
         plt.title(todayDay+'/'+todayMon+'/'+date.today().strftime("%Y"))
         plt.xlabel('Days since first case')
         plt.ylabel('Numbers of cases')
@@ -233,7 +235,7 @@ def dataArrays(region):
         return 'invalid'
 
 
-def scatterPlotCountries(csvData, arrayCountries):
+def scatterPlotCountries(csvData, arrayCountries, plotTitle):
     df = pd.DataFrame()
     place = []
     dpm = []
@@ -259,34 +261,46 @@ def scatterPlotCountries(csvData, arrayCountries):
     df['TotalTests'] = pd.to_numeric(pd.Series(tot), errors='coerce')
     df['TotalCases'] = pd.to_numeric(pd.Series(toc), errors='coerce')
     print(df)
+
+    plt.figure(figsize=plt.figaspect(0.33))
     # barsTestDay = sns.barplot(x=df['Place'], y=df['Case-Per-Million'],
     #                           edgecolor='red', color='red', alpha=0.35, label='Tests')
     cmap = sns.cubehelix_palette(dark=.4, light=.9, as_cmap=True)
     bars = sns.scatterplot(x='Test-Per-Million', y='Case-Per-Million',
-                           hue='Case-Per-Million', size='TotalCases',
+                           hue='Case-Per-Million', size='Dead-Per-Million',
                            data=df,
-                           sizes=(50, 350), palette=cmap)
+                           sizes=(80, 650), palette=cmap)
     for i in df.iterrows():
+        if i[1]['Case-Per-Million'] > 100 and i[1]['Place'] == 'Panama':
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/20),
+                      i[1]['Place'], color='blue', ha="center", fontsize=10, weight='bold')
         if i[1]['Case-Per-Million'] > 1600:
-            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/50),
-                      i[1]['Place'], color='black', ha="center", fontsize=10)
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/60),
+                      i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
         if i[1]['Case-Per-Million'] < 1600 and i[1]['Case-Per-Million'] > 1200:
             bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/40),
-                      i[1]['Place'], color='black', ha="center", fontsize=10)
+                      i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
         elif i[1]['Case-Per-Million'] < 1200 and i[1]['Case-Per-Million'] > 900:
             bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/20),
-                      i[1]['Place'], color='black', ha="center", fontsize=10)
-        elif i[1]['Case-Per-Million'] > 100 and i[1]['Case-Per-Million'] < 900:
-            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/40),
-                      i[1]['Place'], color='black', ha="center", fontsize=10)
-        elif i[1]['Case-Per-Million'] < 100:
-            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million']+ (i[1]['Case-Per-Million']/7),
-                      i[1]['Place'], color='black', ha="center", fontsize=10)                      
-    plt.legend(loc='upper left')
-    figure = plt.gcf()  # get current figure
-    figure.set_size_inches(18, 12) # set figure's size manually to your full screen (32x18)
-    file_name = thePlotPath+'perMillion-'+todayDay+'-'+todayMon+'.png'
-    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight') # bbox_inches removes extra white spaces
+                      i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
+        elif i[1]['Case-Per-Million'] > 150 and i[1]['Case-Per-Million'] < 900  and i[1]['Place'] != 'Panama':
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/30),
+                      i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
+        elif i[1]['Case-Per-Million'] < 150 and i[1]['Case-Per-Million'] > 50:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/9),
+                      i[1]['Place'], color='black', ha="center", fontsize=6, weight='bold')
+        elif i[1]['Case-Per-Million'] < 50:
+            bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/3),
+                      i[1]['Place'], color='black', ha="center", fontsize=6, weight='bold')
+    plt.legend(loc='upper left', fontsize=8)
+    plt.title(plotTitle + ' - Relation per million at ' +
+              todayDay + '/'+todayMon+'/20 - '+todayTime)
+    file_name = thePlotPath + plotTitle + ' perMillion-'+todayDay+'-'+todayMon+'.png'
+    # bbox_inches removes extra white spaces
+    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
     plt.show()
 
     return df
+
+print(2528 - 2752)
+print(11776 - 12583)
