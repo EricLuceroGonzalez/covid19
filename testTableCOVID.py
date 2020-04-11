@@ -63,9 +63,14 @@ def getWorldometerData(Getit):
                     Country.append(j.contents[0])
                 for index, data in enumerate(aTD.findAll('td')):
                     print('index = {}'.format(index))
-                    if index == 1 and len(data.contents) != 0:
-                        TotalCases.append(data.contents[0])
-                    if index == 2:  # and len(data.contents) != 0:
+                    if index == 1:
+                        if len(data.contents) == 0:
+                            NewCases.append(' ')
+                        if len(data.contents) != 0:
+                            s = data.contents[0]
+                            dat = s.replace(',', '')
+                            TotalCases.append(float(dat))
+                    if index == 2:
                         if len(data.contents) == 0:
                             NewCases.append(' ')
                         if len(data.contents) != 0:
@@ -153,13 +158,13 @@ def getWorldometerData(Getit):
 
 
 # Generate new CSV?
-# data = getWorldometerData(True)
-
+data = getWorldometerData(True)
+print(data)
 # Open some CSV
 csvData = pd.read_csv(
-    theCSVPath+'09_04_20-19:59-WorldometersData.csv', sep=",")
+    theCSVPath+'10_04_20-19:06-WorldometersData.csv', sep=",")
 
-print(csvData.loc[[43]])
+print(csvData.loc[[40]])
 print('*************')
 # print(csvData.loc[[1]])
 
@@ -175,7 +180,7 @@ dat1 = ['Argentina', 'Ecuador', 'Peru',
         'Jamaica',
         'Paraguay',
         'Trinidad and Tobago',
-        'Belize', 'Panama', 'Uruguay'
+        'Belize', 'Panama', 'Uruguay', 'Chile'
         ]
 
 dat2 = ['Panama', 'Chile', 'Italy', 'Spain', 'Switzerland', 'Netherlands', 'Iran',
@@ -210,42 +215,62 @@ dat3 = [
 # 'San Marino',
 # 'Gibraltar']
 
-someDf = covid.scatterPlotCountries(csvData, dat1+dat3+dat2, 'Panama')
+
+dat4 = [
+    'USA',
+'Spain',
+'Italy',
+'France',
+'Germany',
+'UK',
+'Iran',
+'Turkey',
+'Belgium',
+'Switzerland',
+'Netherlands',
+'Canada',
+'Brazil',
+'Portugal',
+'Austria',
+'Russia',
+'Israel',
+'S. Korea',
+'Sweden',
+'Ireland',
+'India',
+'Ecuador',
+'Chile',
+'Peru',
+'Norway',
+'Poland',
+'Australia',
+'Japan',
+'Denmark',
+'Romania',
+'Czechia',
+'Pakistan',
+'Malaysia',
+'Philippines',
+'Saudi Arabia',
+'Mexico',
+'Indonesia',
+'UAE',
+'Serbia',
+'Luxembourg',
+'Panama'
+]
+
+
+# someDf = covid.scatterPlotCountries(csvData, dat1+dat3+dat2, 'Panama')
+# s = covid.perMillionPlots(someDf, 'World')
+
 # someDf = covid.scatterPlotCountries(csvData, dat3, 'Europe')
+# s = covid.perMillionPlots(someDf, 'Europe')
 # someDf = covid.scatterPlotCountries(csvData, dat1, 'Latinamerica')
-
+# s = covid.perMillionPlots(someDf, 'Latin America')
 # print(someDf)
+# s = covid.perMillionPlots(someDf, 'Latin America')
 
-a = someDf.sort_values(by=['TotalTests'], ascending=False)
-b = someDf.sort_values(by=['Test-Per-Million'], ascending=False)
-c = someDf.sort_values(by=['Case-Per-Million'], ascending=False)
-pal = sns.color_palette("Greens_d", len(a))
-
-plotTitle = 'World'
-
-plt.figure(figsize=plt.figaspect(2.))
-rank = a['TotalTests'].argsort().argsort()
-sns.barplot(x='TotalTests', y='Place', data=a,
-            palette=np.array(pal[::-1])[rank])
-file_name = thePlotPath + plotTitle + 'Total-'+todayDay+'-'+todayMon+'.png'
-# bbox_inches removes extra white spaces
-plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
-plt.show()
-
-plt.figure(figsize=plt.figaspect(2.))
-rank = a['TotalTests'].argsort().argsort()
-sns.barplot(x='Test-Per-Million', y='Place', data=b,
-            palette=np.array(pal[::-1])[rank])
-file_name = thePlotPath + plotTitle + 'TestperMillion-'+todayDay+'-'+todayMon+'.png'
-# bbox_inches removes extra white spaces
-plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
-plt.show()
-
-plt.figure(figsize=plt.figaspect(2.))
-rank = a['TotalTests'].argsort().argsort()
-sns.barplot(x='Case-Per-Million', y='Place', data=c,
-            palette=np.array(pal[::-1])[rank])
-file_name = thePlotPath + plotTitle + 'CaseperMillion-'+todayDay+'-'+todayMon+'.png'
-# bbox_inches removes extra white spaces
-plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
-plt.show()
+someDf = covid.scatterPlotCountries(csvData, dat4, 'Top 40')
+s = covid.perMillionPlots(someDf, 'Top 40')
+# print(someDf)

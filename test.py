@@ -243,6 +243,7 @@ def scatterPlotCountries(csvData, arrayCountries, plotTitle):
     cpm = []
     tot = []
     toc = []
+    tod = []
     data = arrayCountries
     for j, i in enumerate(data):
         countryIndx = csvData.index[csvData['Country'] == i].tolist()
@@ -253,6 +254,7 @@ def scatterPlotCountries(csvData, arrayCountries, plotTitle):
         toc.append(csvData.loc[countryIndx]['Total Cases'].tolist()[0])
         tpm.append(csvData.loc[countryIndx]['TestsPerM'].tolist()[0])
         cpm.append(csvData.loc[countryIndx]['Tot CasesPerM'].tolist()[0])
+        tod.append(csvData.loc[countryIndx]['Total Deaths'].tolist()[0])        
 
     df['Place'] = pd.Series(place)
     df['Case-Per-Million'] = pd.to_numeric(pd.Series(cpm), errors='coerce')
@@ -260,8 +262,8 @@ def scatterPlotCountries(csvData, arrayCountries, plotTitle):
     df['Test-Per-Million'] = pd.to_numeric(pd.Series(tpm), errors='coerce')
     df['TotalTests'] = pd.to_numeric(pd.Series(tot), errors='coerce')
     df['TotalCases'] = pd.to_numeric(pd.Series(toc), errors='coerce')
+    df['TotalDeaths'] = pd.to_numeric(pd.Series(tod), errors='coerce')    
     print(df)
-
     plt.figure(figsize=plt.figaspect(0.33))
     # barsTestDay = sns.barplot(x=df['Place'], y=df['Case-Per-Million'],
     #                           edgecolor='red', color='red', alpha=0.35, label='Tests')
@@ -283,7 +285,7 @@ def scatterPlotCountries(csvData, arrayCountries, plotTitle):
         elif i[1]['Case-Per-Million'] < 1200 and i[1]['Case-Per-Million'] > 900:
             bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/20),
                       i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
-        elif i[1]['Case-Per-Million'] > 150 and i[1]['Case-Per-Million'] < 900  and i[1]['Place'] != 'Panama':
+        elif i[1]['Case-Per-Million'] > 150 and i[1]['Case-Per-Million'] < 900 and i[1]['Place'] != 'Panama':
             bars.text(i[1]['Test-Per-Million'], i[1]['Case-Per-Million'] + (i[1]['Case-Per-Million']/30),
                       i[1]['Place'], color='black', ha="center", fontsize=9, weight='bold')
         elif i[1]['Case-Per-Million'] < 150 and i[1]['Case-Per-Million'] > 50:
@@ -302,5 +304,71 @@ def scatterPlotCountries(csvData, arrayCountries, plotTitle):
 
     return df
 
-print(2528 - 2752)
-print(11776 - 12583)
+
+def perMillionPlots(theDataFrame, thePlotTitle):
+    
+    colA = 'Case-Per-Million'
+    colB = 'Test-Per-Million'
+    colC = 'TotalTests'
+    colD = 'TotalCases'
+    colE = 'TotalDeaths'
+    colF = 'Dead-Per-Million'
+    # sorted data
+    a = theDataFrame.sort_values(by=[colA], ascending=False)
+    b = theDataFrame.sort_values(by=[colB], ascending=False)
+    c = theDataFrame.sort_values(by=[colC], ascending=False)
+    d = theDataFrame.sort_values(by=[colD], ascending=False)
+    e = theDataFrame.sort_values(by=[colE], ascending=False)
+    f = theDataFrame.sort_values(by=[colF], ascending=False)         
+
+    pal = sns.color_palette("coolwarm", len(a))
+
+    # plt.figure(figsize=plt.figaspect(1.))
+    plt.subplot(121)
+    rank = a[colA].argsort().argsort()
+    sns.barplot(x=colA, y='Place', data=a,
+                palette=np.array(pal[::-1])[rank])
+    
+    plt.subplot(122)
+    rank = b[colB].argsort().argsort()
+    sns.barplot(x=colB, y='Place', data=b,
+                palette=np.array(pal[::-1])[rank])
+    # Save it
+    # plt.title('Panama&'+thePlotTitle +'-perMillion')
+    file_name = thePlotPath + 'Panama&'+thePlotTitle +'-perMillion-'+todayDay+'-'+todayMon+'.png'
+    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+    plt.show()
+
+    # plt.figure(figsize=plt.figaspect(1.))
+    plt.subplot(121)
+    rank = c[colC].argsort().argsort()
+    sns.barplot(x=colC, y='Place', data=c,
+                palette=np.array(pal[::-1])[rank])
+    
+    plt.subplot(122)
+    rank = d[colD].argsort().argsort()
+    sns.barplot(x=colD, y='Place', data=d,
+                palette=np.array(pal[::-1])[rank])
+    # plt.title('Panama&'+thePlotTitle +'-Totals')
+    file_name = thePlotPath + 'Panama&'+thePlotTitle +'-Totals-'+todayDay+'-'+todayMon+'.png'                
+    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+    plt.show()
+
+    # plt.figure(figsize=plt.figaspect(1.))
+    plt.subplot(121)
+    rank = e[colE].argsort().argsort()
+    sns.barplot(x=colE, y='Place', data=e,
+                palette=np.array(pal[::-1])[rank])
+    
+    plt.subplot(122)
+    rank = f[colF].argsort().argsort()
+    sns.barplot(x=colF, y='Place', data=f,
+                palette=np.array(pal[::-1])[rank])
+    # Save it
+    # plt.title('Panama&'+thePlotTitle +'-perMillion')
+    file_name = thePlotPath + 'Panama&'+thePlotTitle +'-Deaths-'+todayDay+'-'+todayMon+'.png'
+    plt.savefig(file_name, dpi=300, quality=95, bbox_inches='tight')
+    plt.show()
+
+print(2974 - 3234)
+print(13648 - 14588)
